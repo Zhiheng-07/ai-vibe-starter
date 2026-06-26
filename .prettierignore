@@ -1,0 +1,8 @@
+node_modules/
+.claude/
+.next/
+out/
+build/
+dist/
+package-lock.json
+*.log

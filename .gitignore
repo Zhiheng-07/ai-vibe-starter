@@ -1,0 +1,33 @@
+# --- Dependencies ---
+node_modules/
+
+# IMPORTANT: package-lock.json is intentionally NOT ignored.
+# It must be committed so everyone installs the exact same dependency tree.
+
+# --- Build output ---
+.next/
+out/
+build/
+dist/
+
+# --- Environment variables ---
+# Real secrets live in *.local files and must NEVER be committed.
+.env.local
+.env.*.local
+# A bare .env may also hold secrets in some setups — ignore it to be safe.
+.env
+# NOTE: .env.example IS committed (it has placeholders only, no secrets).
+
+# --- Logs & caches ---
+*.log
+npm-debug.log*
+.eslintcache
+*.tsbuildinfo
+next-env.d.ts
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
