@@ -1,0 +1,8 @@
+# 1) Secret guard — block env files / obvious secrets before anything else.
+npm run check:secrets
+
+# 2) Format + lint only the staged files (fast).
+npx lint-staged
+
+# 3) Whole-project type check (strict TS) — catches type errors pre-commit.
+npm run typecheck

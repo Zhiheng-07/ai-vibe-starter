@@ -15,8 +15,22 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:node": "node ./scripts/check-node.mjs",
+    "check:secrets": "node ./scripts/check-no-secrets.mjs",
     "setup": "node ./scripts/check-node.mjs && npm install && node ./scripts/init-env.mjs",
-    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck"
+    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "overrides": {
+    "postcss": ">=8.5.10"
   },
   "dependencies": {
     "next": "^15.1.0",
@@ -30,6 +44,8 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.1.0",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.4.0",
     "typescript": "^5.7.0"
   }
