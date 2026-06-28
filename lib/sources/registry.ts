@@ -1,3 +1,4 @@
+import { openaiSource } from "./openai";
 import type { NewsSource } from "./types";
 
 /**
@@ -10,7 +11,6 @@ import type { NewsSource } from "./types";
  *   2) 把 googleaiSource 加进下面的数组。
  * 抓取框架 / 总结 / 存储 / 渲染一行都不用动。
  *
- * 本阶段故意留空：插座先装好，插头（openai / anthropic）下一阶段再插。
  * 类型标注为 NewsSource[]，将来加入不符合接口的对象会被 TS 当场拦下。
  */
-export const SOURCES: NewsSource[] = [];
+export const SOURCES: NewsSource[] = [openaiSource];
