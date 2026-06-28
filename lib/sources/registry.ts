@@ -1,3 +1,4 @@
+import { anthropicSource } from "./anthropic";
 import { openaiSource } from "./openai";
 import type { NewsSource } from "./types";
 
@@ -13,4 +14,4 @@ import type { NewsSource } from "./types";
  *
  * 类型标注为 NewsSource[]，将来加入不符合接口的对象会被 TS 当场拦下。
  */
-export const SOURCES: NewsSource[] = [openaiSource];
+export const SOURCES: NewsSource[] = [openaiSource, anthropicSource];
