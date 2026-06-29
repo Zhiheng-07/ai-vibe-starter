@@ -25,6 +25,9 @@ npm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# --- Local dev data (generated brief snapshots; never commit) ---
+/data/*.local.json
+
 # --- OS / editor noise ---
 .DS_Store
 Thumbs.db

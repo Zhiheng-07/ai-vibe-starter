@@ -1,14 +1,21 @@
 import type { ReactNode } from "react";
 
+import "./globals.css";
+
 export const metadata = {
-  title: "ai-vibe-starter",
-  description: "Reusable Next.js + TypeScript starter scaffold",
+  title: "AI 简报 · 今日 AI 圈在发生什么",
+  description: "每天自动汇总 OpenAI、Anthropic 的官方动态，AI 总结成简体中文，30 秒读完。",
+  openGraph: {
+    title: "AI 简报 · 今日 AI 圈在发生什么",
+    description: "每天自动汇总 OpenAI、Anthropic 的官方动态，AI 总结成简体中文，30 秒读完。",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="zh-CN">
+      <body className="bg-neutral-50 text-neutral-900 antialiased">{children}</body>
     </html>
   );
 }
