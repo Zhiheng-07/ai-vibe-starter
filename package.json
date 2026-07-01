@@ -12,12 +12,13 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:node": "node ./scripts/check-node.mjs",
     "check:secrets": "node ./scripts/check-no-secrets.mjs",
     "setup": "node ./scripts/check-node.mjs && npm install && node ./scripts/init-env.mjs",
-    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck",
+    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck && npm run test",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -51,6 +52,7 @@
     "lint-staged": "^15.2.0",
     "prettier": "^3.4.0",
     "tailwindcss": "^4.3.1",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.9"
   }
 }
