@@ -6,3 +6,8 @@ build/
 dist/
 package-lock.json
 *.log
+
+# Test/debug run artifacts (transient)
+.gate.json
+.perfile.txt
+.vitest-*

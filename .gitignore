@@ -34,3 +34,8 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# --- Test/debug run artifacts (transient, never commit) ---
+.gate.json
+.perfile.txt
+.vitest-*
