@@ -1,1 +1,26 @@
+/* 免费字体：Playfair Display（展示大标题）+ Inter（UI）。正文用系统衬线，无需外链。
+   放在 tailwindcss 之前，满足 CSS「@import 必须最先」的规则。 */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500;700&display=swap");
 @import "tailwindcss";
+
+/* 设计 tokens（DESIGN.md §1/§2）——全页暖灰阶，无彩色。 */
+@theme {
+  --color-cream: #f7f4ed; /* 奶油底：页面/通栏背景 */
+  --color-paper: #ffffff; /* 纸白：卡片表面 */
+  --color-ink: #242424; /* 墨：主文字/标题 */
+  --color-body: #333333; /* 正文灰：次级正文 */
+  --color-btn: #191919; /* 墨黑：药丸按钮背景 */
+  --color-margin: #6b6b6b; /* 边注灰：日期/来源/弱标注 */
+
+  /* 标题 Playfair + 中文回退；UI Inter + 中文回退；正文系统衬线 + 中文回退 */
+  --font-display: "Playfair Display", "Noto Serif SC", "Songti SC", serif;
+  --font-ui: "Inter", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  --font-read: Georgia, "Source Serif Pro", "Noto Serif SC", "Songti SC", serif;
+}
+
+/* 全局：奶油底 + 墨色 + Inter 为默认 UI 字体 */
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+}
