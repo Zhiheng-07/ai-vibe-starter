@@ -3,6 +3,8 @@ import path from "node:path";
 
 import type { NewsItem } from "@/lib/sources/types";
 
+import BriefList from "./components/brief-list";
+
 interface SourceStatus {
   sourceId: string;
   label: string;
@@ -33,81 +35,59 @@ const fullDate = (iso: string) =>
     new Date(iso),
   );
 
-const shortDate = (iso: string) =>
-  new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric" }).format(new Date(iso));
+const DAY_MS = 24 * 60 * 60 * 1000;
 
-// 来源 chip 的淡色区分，未知来源回退中性灰。
-const SOURCE_STYLES: Record<string, string> = {
-  openai: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
-  anthropic: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
-};
-const chipStyle = (id: string) =>
-  SOURCE_STYLES[id] ?? "bg-neutral-100 text-neutral-600 ring-1 ring-neutral-200";
+/**
+ * 展示分层（DESIGN.md §5）：按时间从新到旧排序；若最新一条发布在参照时刻的 24h 内，
+ * 则置顶高亮，其余平铺。参照时刻用简报的 generatedAt（快照自身的「当时」），
+ * 使静态快照也能稳定演示置顶逻辑，且与「这条在简报生成时是否新鲜」语义一致。
+ */
+function layout(brief: Brief): { pinned: NewsItem | null; rest: NewsItem[] } {
+  const sorted = [...brief.items].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+  );
+  const ref = new Date(brief.generatedAt).getTime();
+  const newest = sorted[0];
+  const age = newest ? ref - new Date(newest.publishedAt).getTime() : Infinity;
+  const isFresh = age >= 0 && age <= DAY_MS;
 
-function labelOf(brief: Brief, sourceId: string): string {
-  return brief.sources.find((s) => s.sourceId === sourceId)?.label ?? sourceId;
+  return isFresh ? { pinned: newest, rest: sorted.slice(1) } : { pinned: null, rest: sorted };
 }
 
 export default function Home() {
   const brief = loadBrief();
+  const hasItems = brief && brief.items.length > 0;
+  const { pinned, rest } = hasItems ? layout(brief) : { pinned: null, rest: [] };
+  const labels: Record<string, string> = {};
+  brief?.sources.forEach((s) => {
+    labels[s.sourceId] = s.label;
+  });
 
   return (
-    <main className="mx-auto min-h-screen max-w-2xl px-5 py-12 sm:py-16">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">AI 简报</h1>
-        <p className="mt-2 text-sm text-neutral-500">
+    <main className="mx-auto min-h-screen max-w-[720px] px-6 py-12 sm:py-16">
+      <header className="mb-12">
+        <h1 className="font-display text-[42px] font-bold leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl">
+          AI 简报
+        </h1>
+        <p className="mt-4 font-ui text-[15px] text-margin">
           每天汇总 OpenAI、Anthropic 的官方动态，AI 总结成简体中文。
         </p>
-        {brief && <p className="mt-1 text-sm text-neutral-400">{fullDate(brief.date)}</p>}
+        {brief && <p className="mt-1 font-ui text-[13px] text-margin">{fullDate(brief.date)}</p>}
       </header>
 
-      {!brief || brief.items.length === 0 ? (
-        <p className="rounded-2xl border border-neutral-200 bg-white px-5 py-10 text-center text-sm text-neutral-500">
+      {!hasItems ? (
+        <p className="bg-paper px-6 py-12 font-read text-base text-margin">
           今日暂无更新，或数据源暂不可用。
         </p>
       ) : (
-        <ul className="space-y-4">
-          {brief.items.map((item) => (
-            <li
-              key={item.guid ?? item.link}
-              className="rounded-2xl border border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-300"
-            >
-              <div className="flex items-center gap-2 text-xs">
-                <span
-                  className={`rounded-full px-2 py-0.5 font-medium ${chipStyle(item.sourceId)}`}
-                >
-                  {labelOf(brief, item.sourceId)}
-                </span>
-                <time className="text-neutral-400">{shortDate(item.publishedAt)}</time>
-              </div>
-
-              <h2 className="mt-3 text-lg font-semibold leading-snug text-neutral-900">
-                {item.titleZh}
-              </h2>
-
-              {item.summaryZh && (
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">{item.summaryZh}</p>
-              )}
-
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
-              >
-                阅读原文
-                <span aria-hidden>→</span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <BriefList pinned={pinned} rest={rest} labels={labels} />
       )}
 
       {brief && (
-        <footer className="mt-10 border-t border-neutral-200 pt-6 text-xs text-neutral-400">
+        <footer className="mt-16 border-t border-[#e3ddd0] pt-8 font-ui text-[13px] text-margin">
           <p>
             内容由 AI 自动总结，专有名词保留英文；请以
-            <span className="text-neutral-500"> 阅读原文 </span>
+            <span className="text-ink"> 阅读原文 </span>
             为准。
           </p>
           <p className="mt-1">最后更新：{fullDate(brief.generatedAt)}</p>
