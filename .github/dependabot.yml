@@ -1,0 +1,16 @@
+# Dependabot：GitHub 自带的依赖漏洞扫描 + 自动升级机器人。
+# 它按下面的规则定期检查依赖，发现过期/有漏洞的版本就自动开 PR 来升级。
+version: 2 # 配置文件格式版本，固定写 2（Dependabot 现行版本）
+
+updates:
+  # ── 第一组：监控 npm（Node）依赖，即 package.json / package-lock.json ──
+  - package-ecosystem: "npm" # 生态类型：npm，扫 package.json 里的依赖
+    directory: "/" # 到哪找依赖清单：仓库根目录（package.json 就在根）
+    schedule:
+      interval: "weekly" # 检查频率：每周一次（还可选 daily / monthly）
+
+  # ── 第二组：监控 GitHub Actions 用到的 action 版本（.github/workflows/*.yml）──
+  - package-ecosystem: "github-actions" # 生态类型：GitHub Actions
+    directory: "/" # Actions 固定看仓库根下的 .github/workflows，这里也写 "/"
+    schedule:
+      interval: "weekly" # 同样每周检查一次
