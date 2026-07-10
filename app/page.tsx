@@ -67,7 +67,7 @@ export default function Home() {
     <main className="mx-auto min-h-screen max-w-[720px] px-6 py-12 sm:py-16">
       <header className="mb-12">
         <h1 className="font-display text-[42px] font-bold leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl">
-          AI 简报
+          AI 简报（回滚演练版）
         </h1>
         <p className="mt-4 font-ui text-[15px] text-margin">
           每天汇总 OpenAI、Anthropic 的官方动态，AI 总结成简体中文。
